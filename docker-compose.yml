@@ -1,0 +1,45 @@
+# Lucia Dev Environment
+# Run: docker compose up
+# This starts all services needed for local development.
+
+services:
+  mock-cvm:
+    build:
+      context: ..
+      dockerfile: dev-environment/mock-cvm/Dockerfile
+    ports:
+      - "8080:8080"
+    environment:
+      - PORT=8080
+    healthcheck:
+      test: ["CMD", "wget", "-q", "--spider", "http://localhost:8080/health"]
+      interval: 10s
+      timeout: 3s
+      retries: 3
+
+  mock-attestation:
+    build:
+      context: .
+      dockerfile: mock-attestation/Dockerfile
+    ports:
+      - "8081:8081"
+    environment:
+      - PORT=8081
+    healthcheck:
+      test: ["CMD", "wget", "-q", "--spider", "http://localhost:8081/health"]
+      interval: 10s
+      timeout: 3s
+      retries: 3
+
+  pwa-dev:
+    build:
+      context: ..
+      dockerfile: dev-environment/pwa-dev.Dockerfile
+    ports:
+      - "5173:5173"
+    volumes:
+      - ../pwa-client/src:/app/src
+      - ../pwa-client/static:/app/static
+    depends_on:
+      mock-cvm:
+        condition: service_healthy
