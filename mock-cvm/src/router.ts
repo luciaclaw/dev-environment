@@ -7,28 +7,28 @@ import { generateMockResponse } from './mock-llm.js';
 
 const MOCK_MODELS: ModelInfo[] = [
   {
-    id: 'deepseek/deepseek-chat-v3-0324',
-    name: 'DeepSeek Chat V3',
-    provider: 'deepseek',
-    contextLength: 65536,
-    inputPrice: 0.50,
-    outputPrice: 1.50,
-  },
-  {
-    id: 'meta-llama/llama-4-maverick',
-    name: 'Llama 4 Maverick',
-    provider: 'meta-llama',
-    contextLength: 131072,
-    inputPrice: 0.20,
-    outputPrice: 0.30,
-  },
-  {
-    id: 'qwen/qwq-32b',
-    name: 'QWQ 32B',
-    provider: 'qwen',
+    id: 'moonshotai/kimi-k2.5',
+    name: 'Kimi K2.5',
+    provider: 'moonshotai',
     contextLength: 131072,
     inputPrice: 0.20,
     outputPrice: 0.60,
+  },
+  {
+    id: 'phala/uncensored-24b',
+    name: 'Uncensored 24B',
+    provider: 'phala',
+    contextLength: 32768,
+    inputPrice: 0.10,
+    outputPrice: 0.30,
+  },
+  {
+    id: 'z-ai/glm-5',
+    name: 'GLM-5',
+    provider: 'z-ai',
+    contextLength: 131072,
+    inputPrice: 0.50,
+    outputPrice: 1.50,
   },
 ];
 
