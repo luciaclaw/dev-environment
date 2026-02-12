@@ -2,8 +2,11 @@
  * Message routing — dispatches decrypted messages to handlers.
  */
 
-import type { MessageEnvelope, ChatMessagePayload, ModelInfo } from '@luciaclaw/protocol';
+import type { MessageEnvelope, ChatMessagePayload, ModelInfo, PreferencesSetPayload } from '@luciaclaw/protocol';
 import { generateMockResponse } from './mock-llm.js';
+
+/** In-memory preferences store for mock CVM */
+const mockPreferences: Record<string, string> = {};
 
 const MOCK_MODELS: ModelInfo[] = [
   {
@@ -68,6 +71,28 @@ export async function routeMessage(msg: MessageEnvelope): Promise<MessageEnvelop
     case 'tool.confirm.response':
       console.log('[mock-cvm] Tool confirmation received:', msg.payload);
       return null;
+
+    case 'preferences.set': {
+      const prefPayload = msg.payload as PreferencesSetPayload;
+      mockPreferences[prefPayload.key] = prefPayload.value;
+      console.log(`[mock-cvm] Preference set: ${prefPayload.key} = ${prefPayload.value}`);
+      return {
+        id: crypto.randomUUID(),
+        type: 'preferences.response',
+        timestamp: Date.now(),
+        payload: { preferences: { ...mockPreferences } },
+      };
+    }
+
+    case 'preferences.list': {
+      console.log('[mock-cvm] Preferences list requested');
+      return {
+        id: crypto.randomUUID(),
+        type: 'preferences.response',
+        timestamp: Date.now(),
+        payload: { preferences: { ...mockPreferences } },
+      };
+    }
 
     default:
       console.log('[mock-cvm] Unhandled message type:', msg.type);
