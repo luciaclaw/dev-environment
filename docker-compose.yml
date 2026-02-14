@@ -11,6 +11,7 @@ services:
       - "8080:8080"
     environment:
       - PORT=8080
+      - CVM_PUBLIC_URL=${CVM_PUBLIC_URL:-}
     healthcheck:
       test: ["CMD", "wget", "-q", "--spider", "http://localhost:8080/health"]
       interval: 10s
